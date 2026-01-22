@@ -91,10 +91,11 @@ The simulation is configured via a YAML file with the following structure:
 ```yaml
 # Simulation parameters
 simulation:
-  max_steps: 1000              # Maximum simulation steps before termination
+  max_steps: 2000              # Maximum simulation steps before termination
   agent_spawn_rate: 5          # Spawn one agent every N steps
   agent_spawn_count: 20        # Total agents to spawn
   random_seed: null            # Optional: seed for reproducibility (null = random)
+  stuck_threshold: 200         # Steps without progress before declaring gridlock
 
 # Agent parameters
 agent:
