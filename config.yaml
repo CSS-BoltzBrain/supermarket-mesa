@@ -25,30 +25,101 @@ shop_layout:
   # Shelves: rectangles that act as obstacles
   # Products are placed at accessible edges of shelves
   shelves:
+    # === Aisle 1 (left side) ===
     - type: rectangle
-      x: 5
-      y: 8
-      width: 8
+      x: 4
+      y: 5
+      width: 10
       height: 2
-      products: ["bread", "milk"]
+      products: ["bread", "rolls", "bagels"]
     - type: rectangle
-      x: 5
-      y: 14
-      width: 8
+      x: 4
+      y: 9
+      width: 10
       height: 2
-      products: ["eggs", "cheese"]
+      products: ["milk", "cream", "butter"]
     - type: rectangle
-      x: 20
-      y: 8
-      width: 8
+      x: 4
+      y: 13
+      width: 10
       height: 2
-      products: ["butter", "juice"]
+      products: ["eggs", "cheese", "yogurt"]
     - type: rectangle
-      x: 20
-      y: 14
-      width: 8
+      x: 4
+      y: 17
+      width: 10
       height: 2
-      products: ["cereal", "yogurt"]
+      products: ["juice", "soda", "water"]
+    - type: rectangle
+      x: 4
+      y: 21
+      width: 10
+      height: 2
+      products: ["chips", "crackers", "nuts"]
+
+    # === Aisle 2 (center-left) ===
+    - type: rectangle
+      x: 18
+      y: 5
+      width: 10
+      height: 2
+      products: ["cereal", "oatmeal", "granola"]
+    - type: rectangle
+      x: 18
+      y: 9
+      width: 10
+      height: 2
+      products: ["pasta", "rice", "beans"]
+    - type: rectangle
+      x: 18
+      y: 13
+      width: 10
+      height: 2
+      products: ["soup", "sauce", "canned_veg"]
+    - type: rectangle
+      x: 18
+      y: 17
+      width: 10
+      height: 2
+      products: ["coffee", "tea", "cocoa"]
+    - type: rectangle
+      x: 18
+      y: 21
+      width: 10
+      height: 2
+      products: ["cookies", "candy", "chocolate"]
+
+    # === Aisle 3 (center-right) ===
+    - type: rectangle
+      x: 32
+      y: 5
+      width: 10
+      height: 2
+      products: ["flour", "sugar", "salt"]
+    - type: rectangle
+      x: 32
+      y: 9
+      width: 10
+      height: 2
+      products: ["oil", "vinegar", "spices"]
+    - type: rectangle
+      x: 32
+      y: 13
+      width: 10
+      height: 2
+      products: ["ketchup", "mustard", "mayo"]
+    - type: rectangle
+      x: 32
+      y: 17
+      width: 10
+      height: 2
+      products: ["detergent", "soap", "shampoo"]
+    - type: rectangle
+      x: 32
+      y: 21
+      width: 10
+      height: 2
+      products: ["paper_towels", "tissues", "toilet_paper"]
 
   # Entrance points (agents spawn here)
   entrances:
