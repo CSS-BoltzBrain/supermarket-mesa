@@ -3,7 +3,7 @@
 from collections import deque
 
 
-def bfs_path(start, goal, walkable_cells, occupied_cells=None):
+def bfs_path(start, goal, walkable_cells, occupied_cells=None, max_depth=None):
     """
     Find shortest path from start to goal using BFS.
 
@@ -12,6 +12,7 @@ def bfs_path(start, goal, walkable_cells, occupied_cells=None):
         goal: Tuple (x, y) target position
         walkable_cells: Set of (x, y) tuples that are walkable
         occupied_cells: Set of (x, y) tuples currently occupied by agents (optional)
+        max_depth: Maximum search depth (optional, for performance)
 
     Returns:
         List of (x, y) tuples representing the path (excluding start, including goal),
@@ -23,38 +24,46 @@ def bfs_path(start, goal, walkable_cells, occupied_cells=None):
     if start == goal:
         return []
 
-    # Cells we can walk through (walkable and not occupied, except goal)
-    available = walkable_cells - occupied_cells
-    available.add(goal)  # Goal is always considered reachable
-    available.add(start)  # Start is always available
-
     if goal not in walkable_cells:
         return None
 
-    # BFS
-    queue = deque([(start, [start])])
-    visited = {start}
+    # BFS with parent tracking (more memory efficient than storing full paths)
+    queue = deque([(start, 0)])  # (position, depth)
+    parent = {start: None}
 
     while queue:
-        current, path = queue.popleft()
+        current, depth = queue.popleft()
+
+        # Check depth limit
+        if max_depth is not None and depth >= max_depth:
+            continue
 
         # Get neighbors (4-directional movement)
         x, y = current
         neighbors = [(x+1, y), (x-1, y), (x, y+1), (x, y-1)]
 
         for neighbor in neighbors:
-            if neighbor in visited:
+            if neighbor in parent:
                 continue
-            if neighbor not in available:
+            # Check if walkable (goal is always reachable, others must not be occupied)
+            if neighbor not in walkable_cells:
+                continue
+            if neighbor != goal and neighbor in occupied_cells:
                 continue
 
-            new_path = path + [neighbor]
+            parent[neighbor] = current
 
             if neighbor == goal:
-                return new_path[1:]  # Exclude start position
+                # Reconstruct path
+                path = []
+                node = goal
+                while node != start:
+                    path.append(node)
+                    node = parent[node]
+                path.reverse()
+                return path
 
-            visited.add(neighbor)
-            queue.append((neighbor, new_path))
+            queue.append((neighbor, depth + 1))
 
     return None  # No path found
 
