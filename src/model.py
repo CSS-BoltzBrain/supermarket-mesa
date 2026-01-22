@@ -60,6 +60,12 @@ class SupermarketModel(Model):
         self.agents_completed = 0
         self.current_step = 0
 
+        # Stuck detection
+        self._last_completed = 0
+        self._stuck_steps = 0
+        self._stuck_threshold = sim_config.get("stuck_threshold", 100)  # Steps without progress
+        self.is_stuck = False
+
         # Get available product names
         self.available_products = list(self.shop_grid.product_positions.keys())
 
@@ -94,8 +100,22 @@ class SupermarketModel(Model):
         for agent in agents_to_step:
             agent.step()
 
+        # Check for stuck condition
+        self._check_stuck()
+
         # Collect data
         self.datacollector.collect(self)
+
+    def _check_stuck(self):
+        """Check if simulation is stuck (no progress for too long)."""
+        if self.agents_completed > self._last_completed:
+            self._last_completed = self.agents_completed
+            self._stuck_steps = 0
+        elif len(self.agents) > 0:
+            self._stuck_steps += 1
+
+        if self._stuck_steps >= self._stuck_threshold:
+            self.is_stuck = True
 
     def _maybe_spawn_agent(self):
         """Spawn a new agent if conditions are met."""
@@ -155,6 +175,9 @@ class SupermarketModel(Model):
     def is_running(self):
         """Check if simulation should continue running."""
         if self.current_step >= self.max_steps:
+            return False
+
+        if self.is_stuck:
             return False
 
         # Continue if there are agents or more to spawn

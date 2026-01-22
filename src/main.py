@@ -112,10 +112,15 @@ def main():
     model = run_simulation(config, visual=visual, delay=args.delay)
 
     # Final status
-    print(f"\nSimulation complete!")
+    if model.is_stuck:
+        print(f"\nSimulation stopped: GRIDLOCK DETECTED")
+        print(f"  No progress for {model._stuck_threshold} steps")
+    else:
+        print(f"\nSimulation complete!")
     print(f"  Total steps: {model.current_step}")
     print(f"  Agents spawned: {model.agents_spawned}")
     print(f"  Agents completed: {model.agents_completed}")
+    print(f"  Agents remaining: {len(model.agents)}")
 
     # Export data if requested
     if args.export:
