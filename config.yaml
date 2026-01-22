@@ -40,19 +40,19 @@ shop_layout:
       products: ["milk", "cream", "butter"]
     - type: rectangle
       x: 4
-      y: 13
+      y: 15
       width: 10
       height: 2
       products: ["eggs", "cheese", "yogurt"]
     - type: rectangle
       x: 4
-      y: 17
+      y: 21
       width: 10
       height: 2
       products: ["juice", "soda", "water"]
     - type: rectangle
       x: 4
-      y: 21
+      y: 25
       width: 10
       height: 2
       products: ["chips", "crackers", "nuts"]
@@ -72,19 +72,19 @@ shop_layout:
       products: ["pasta", "rice", "beans"]
     - type: rectangle
       x: 18
-      y: 13
+      y: 15
       width: 10
       height: 2
       products: ["soup", "sauce", "canned_veg"]
     - type: rectangle
       x: 18
-      y: 17
+      y: 21
       width: 10
       height: 2
       products: ["coffee", "tea", "cocoa"]
     - type: rectangle
       x: 18
-      y: 21
+      y: 25
       width: 10
       height: 2
       products: ["cookies", "candy", "chocolate"]
@@ -104,19 +104,19 @@ shop_layout:
       products: ["oil", "vinegar", "spices"]
     - type: rectangle
       x: 32
-      y: 13
+      y: 15
       width: 10
       height: 2
       products: ["ketchup", "mustard", "mayo"]
     - type: rectangle
       x: 32
-      y: 17
+      y: 21
       width: 10
       height: 2
       products: ["detergent", "soap", "shampoo"]
     - type: rectangle
       x: 32
-      y: 21
+      y: 25
       width: 10
       height: 2
       products: ["paper_towels", "tissues", "toilet_paper"]
