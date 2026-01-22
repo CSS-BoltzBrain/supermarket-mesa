@@ -3,7 +3,7 @@
 # Simulation parameters
 simulation:
   max_steps: 2000              # Maximum simulation steps before termination
-  agent_spawn_rate: 2          # Spawn one agent every N steps
+  agent_spawn_rate: 1          # Spawn one agent every N steps (1 = rush hour)
   agent_spawn_count: 200       # Total agents to spawn
   random_seed: null            # Optional: seed for reproducibility (null = random)
   stuck_threshold: 200         # Steps without progress before declaring gridlock
@@ -125,12 +125,12 @@ shop_layout:
   entrances:
     - x: 1
       y: 1
-      width: 2
-      height: 1
+      width: 5
+      height: 2
 
   # Exit points (agents leave here)
   exits:
-    - x: 47
+    - x: 44
       y: 28
-      width: 2
+      width: 5
       height: 1
