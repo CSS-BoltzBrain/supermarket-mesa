@@ -254,3 +254,17 @@ python src/main.py --config config.yaml --agent-count 50
 # Set random seed for reproducibility
 python src/main.py --config config.yaml --seed 42
 ```
+
+
+# Python Runtime Management
+how to control python on debian or ubuntu?
+you may need to install python3-venv.
+
+create the python venv one layer above the git repository.
+
+# source code management
+commit at each logic change
+
+do not commit __pycache__ folder and pyc files
+if these files are not in .gitignore. put them inside root .gitignore.
+
