@@ -3,8 +3,8 @@
 # Simulation parameters
 simulation:
   max_steps: 2000              # Maximum simulation steps before termination
-  agent_spawn_rate: 5          # Spawn one agent every N steps
-  agent_spawn_count: 20        # Total agents to spawn
+  agent_spawn_rate: 2          # Spawn one agent every N steps
+  agent_spawn_count: 200       # Total agents to spawn
   random_seed: null            # Optional: seed for reproducibility (null = random)
   stuck_threshold: 200         # Steps without progress before declaring gridlock
 
