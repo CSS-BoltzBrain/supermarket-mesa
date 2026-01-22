@@ -42,6 +42,9 @@ class CustomerAgent(Agent):
         self.current_target = None
         self.dwell_counter = 0
         self._cached_path = []  # Cached path to current target
+        self._stuck_counter = 0  # Steps stuck at same position
+        self._last_pos = None
+        self._pathfind_cooldown = 0  # Steps to wait before retrying pathfinding
 
     def step(self):
         """Execute one step of the agent's behavior."""
@@ -180,18 +183,27 @@ class CustomerAgent(Agent):
 
         if self.pos == self.current_target:
             self._cached_path = []
+            self._stuck_counter = 0
             return
+
+        # Decrement pathfinding cooldown
+        if self._pathfind_cooldown > 0:
+            self._pathfind_cooldown -= 1
 
         # Check if we need to recalculate path
         need_recalc = False
 
         if not self._cached_path:
-            need_recalc = True
+            if self._pathfind_cooldown <= 0:
+                need_recalc = True
         else:
             next_pos = self._cached_path[0]
             # Recalculate if next step is blocked
             if not self.model.grid.is_cell_empty(next_pos):
-                need_recalc = True
+                if self._pathfind_cooldown <= 0:
+                    need_recalc = True
+                else:
+                    self._cached_path = []  # Clear invalid path
 
         if need_recalc:
             occupied = self.model.get_occupied_cells()
@@ -204,13 +216,51 @@ class CustomerAgent(Agent):
                 occupied
             ) or []
 
+            # If no path found, set cooldown to avoid repeated failed searches
+            if not self._cached_path:
+                self._pathfind_cooldown = 5
+
         # Try to move along cached path
+        moved = False
         if self._cached_path:
             next_pos = self._cached_path[0]
             if self.model.grid.is_cell_empty(next_pos):
                 self.model.grid.move_agent(self, next_pos)
                 self._cached_path.pop(0)
-        # If no path or blocked, agent waits this step
+                moved = True
+                self._pathfind_cooldown = 0  # Reset cooldown on successful move
+
+        # Track stuck status and try to wiggle if stuck too long
+        if not moved:
+            if self.pos == self._last_pos:
+                self._stuck_counter += 1
+            else:
+                self._stuck_counter = 0
+
+            # If stuck for too long, try to move to any adjacent empty cell
+            if self._stuck_counter >= 10:
+                self._try_wiggle()
+
+        self._last_pos = self.pos
+
+    def _try_wiggle(self):
+        """Try to move to any adjacent empty cell to break deadlock."""
+        x, y = self.pos
+        neighbors = [(x+1, y), (x-1, y), (x, y+1), (x, y-1)]
+
+        # Filter to walkable and empty cells
+        available = [
+            n for n in neighbors
+            if n in self.model.shop_grid.walkable_cells
+            and self.model.grid.is_cell_empty(n)
+        ]
+
+        if available:
+            # Move to a random available cell
+            next_pos = self.model.random.choice(available)
+            self.model.grid.move_agent(self, next_pos)
+            self._cached_path = []  # Clear cached path after wiggle
+            self._stuck_counter = 0
 
     @property
     def products_remaining(self):
