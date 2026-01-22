@@ -41,6 +41,7 @@ class CustomerAgent(Agent):
         self.products_collected = []
         self.current_target = None
         self.dwell_counter = 0
+        self._cached_path = []  # Cached path to current target
 
     def step(self):
         """Execute one step of the agent's behavior."""
@@ -107,6 +108,8 @@ class CustomerAgent(Agent):
 
     def _set_next_target(self):
         """Set the next product location as the target."""
+        self._cached_path = []  # Clear cached path when target changes
+
         if not self.shopping_list:
             self.current_target = None
             return
@@ -125,6 +128,8 @@ class CustomerAgent(Agent):
 
     def _set_exit_target(self):
         """Set the nearest exit as the target."""
+        self._cached_path = []  # Clear cached path when target changes
+
         if not self.model.shop_grid.exit_cells:
             self.current_target = None
             return
@@ -173,23 +178,38 @@ class CustomerAgent(Agent):
         if self.current_target is None:
             return
 
-        # Get currently occupied cells (excluding self)
-        occupied = self.model.get_occupied_cells()
-        occupied.discard(self.pos)
+        if self.pos == self.current_target:
+            self._cached_path = []
+            return
 
-        # Find path to target
-        path = bfs_path(
-            self.pos,
-            self.current_target,
-            self.model.shop_grid.walkable_cells,
-            occupied
-        )
+        # Check if we need to recalculate path
+        need_recalc = False
 
-        if path and len(path) > 0:
-            next_pos = path[0]
-            # Check if next position is free
+        if not self._cached_path:
+            need_recalc = True
+        else:
+            next_pos = self._cached_path[0]
+            # Recalculate if next step is blocked
+            if not self.model.grid.is_cell_empty(next_pos):
+                need_recalc = True
+
+        if need_recalc:
+            occupied = self.model.get_occupied_cells()
+            occupied.discard(self.pos)
+
+            self._cached_path = bfs_path(
+                self.pos,
+                self.current_target,
+                self.model.shop_grid.walkable_cells,
+                occupied
+            ) or []
+
+        # Try to move along cached path
+        if self._cached_path:
+            next_pos = self._cached_path[0]
             if self.model.grid.is_cell_empty(next_pos):
                 self.model.grid.move_agent(self, next_pos)
+                self._cached_path.pop(0)
         # If no path or blocked, agent waits this step
 
     @property
