@@ -4,8 +4,12 @@ import argparse
 import time
 import yaml
 
-from .model import SupermarketModel
-from .visualization import display, clear_screen
+try:
+    from .model import SupermarketModel
+    from .visualization import display, clear_screen
+except ImportError:
+    from model import SupermarketModel
+    from visualization import display, clear_screen
 
 
 def load_config(config_path):

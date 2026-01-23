@@ -1,8 +1,13 @@
 """ASCII visualization for the supermarket simulation."""
 
 import os
-from .grid_builder import CellType
-from .agent import AgentState
+
+try:
+    from .grid_builder import CellType
+    from .agent import AgentState
+except ImportError:
+    from grid_builder import CellType
+    from agent import AgentState
 
 
 # Agent display characters based on state

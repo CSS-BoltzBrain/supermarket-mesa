@@ -4,8 +4,12 @@ import random
 from mesa import Model, DataCollector
 from mesa.space import SingleGrid
 
-from .agent import CustomerAgent, AgentState
-from .grid_builder import build_grid
+try:
+    from .agent import CustomerAgent, AgentState
+    from .grid_builder import build_grid
+except ImportError:
+    from agent import CustomerAgent, AgentState
+    from grid_builder import build_grid
 
 
 class SupermarketModel(Model):

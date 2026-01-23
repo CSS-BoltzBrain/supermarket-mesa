@@ -3,7 +3,10 @@
 from enum import Enum
 from mesa import Agent
 
-from .pathfinding import bfs_path, manhattan_distance
+try:
+    from .pathfinding import bfs_path, manhattan_distance
+except ImportError:
+    from pathfinding import bfs_path, manhattan_distance
 
 
 class AgentState(Enum):
