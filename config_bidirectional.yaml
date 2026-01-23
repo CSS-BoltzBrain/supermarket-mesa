@@ -1,0 +1,97 @@
+# Supermarket Simulation Configuration - Bi-directional Flow Test
+# ================================================================
+# Creates counter-flow to test for spontaneous lane formation.
+#
+# Design: Narrow corridor with entrance-exit pairs on opposite ends
+# - Agents enter from BOTH left and right sides
+# - Each agent exits to the NEAREST exit after shopping
+# - Products distributed throughout force cross-corridor movement
+# - This creates counter-flowing streams that may self-organize into lanes
+
+# Simulation parameters
+simulation:
+  max_steps: 500               # Observe steady-state patterns
+  agent_spawn_rate: 2          # Spawn one agent every 2 steps
+  agent_spawn_count: 100       # Total agents to spawn
+  random_seed: 42              # Fixed seed for reproducibility
+  stuck_threshold: 200         # Steps without progress before gridlock
+
+# Agent parameters
+agent:
+  interaction_distance: 1      # Manhattan distance to "reach" a product
+  product_dwell_time: 2        # Short dwell = faster flow
+  max_products_per_agent: 2    # Few products = agents traverse corridor
+
+# Shop layout - Narrow corridor design
+shop_layout:
+  size:
+    width: 60
+    height: 10                 # Narrow! Forces corridor usage
+
+  # Shelves creating corridor walls (top and bottom)
+  shelves:
+    # === TOP SHELF ROW (y=7-8) ===
+    - type: rectangle
+      x: 10
+      y: 7
+      width: 8
+      height: 2
+      products: ["bread", "milk"]
+    - type: rectangle
+      x: 25
+      y: 7
+      width: 8
+      height: 2
+      products: ["eggs", "cheese"]
+    - type: rectangle
+      x: 40
+      y: 7
+      width: 8
+      height: 2
+      products: ["butter", "yogurt"]
+
+    # === BOTTOM SHELF ROW (y=1-2) ===
+    - type: rectangle
+      x: 10
+      y: 1
+      width: 8
+      height: 2
+      products: ["juice", "soda"]
+    - type: rectangle
+      x: 25
+      y: 1
+      width: 8
+      height: 2
+      products: ["cereal", "pasta"]
+    - type: rectangle
+      x: 40
+      y: 1
+      width: 8
+      height: 2
+      products: ["rice", "beans"]
+
+  # TWO ENTRANCES - on opposite sides
+  entrances:
+    # Left entrance
+    - x: 1
+      y: 4
+      width: 2
+      height: 2
+    # Right entrance
+    - x: 57
+      y: 4
+      width: 2
+      height: 2
+
+  # TWO EXITS - on opposite sides (agents go to nearest)
+  exits:
+    # Right exit (for agents entering from left)
+    - x: 57
+      y: 4
+      width: 2
+      height: 2
+    # Left exit (for agents entering from right)
+    - x: 1
+      y: 4
+      width: 2
+      height: 2

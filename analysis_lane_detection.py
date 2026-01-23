@@ -878,4 +878,22 @@ def run_lane_analysis():
 
 
 if __name__ == '__main__':
+    import sys
+    # Allow specifying data directory as argument
+    if len(sys.argv) > 1:
+        data_dir = sys.argv[1]
+        agent_path = f'{data_dir}/agent_data.csv'
+        model_path = f'{data_dir}/model_data.csv'
+    else:
+        agent_path = 'data/agent_data.csv'
+        model_path = 'data/model_data.csv'
+
+    # Update global shop dimensions if analyzing bidirectional config
+    if 'bidirectional' in (data_dir if len(sys.argv) > 1 else ''):
+        SHOP_WIDTH = 60
+        SHOP_HEIGHT = 10
+        ENTRANCE = (1, 5)
+        EXIT = (57, 5)
+        AISLE_Y_RANGES = [(4, 6)]  # Single corridor
+
     run_lane_analysis()
