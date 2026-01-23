@@ -76,6 +76,8 @@ Each agent receives a randomized shopping list at spawn time:
 - **Blocked movement**: If target cell is occupied, agent waits (no movement that step)
 - **Recalculation**: Path is recalculated each step to handle dynamic obstacles (other agents)
 
+The corresponding social force needed to be included to show self-organized criticality such as two-lane formation (cite: quantitative sociodynamis by Dirk Helbing)
+
 ### Product Interaction
 
 - Agent must be on a floor cell adjacent to (within `interaction_distance` of) the product cell
@@ -268,3 +270,6 @@ commit at each logic change
 do not commit __pycache__ folder and pyc files
 if these files are not in .gitignore. put them inside root .gitignore.
 
+
+# Analysis
+if you made plots, write down interpretation to the plots in a markdown file.
